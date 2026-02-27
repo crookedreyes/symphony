@@ -32,4 +32,6 @@ help with the setup:
 
 ---
 
-This repository is licensed under the Apache-2.0 License.
+## License
+
+This project is licensed under the [Apache License 2.0](LICENSE).

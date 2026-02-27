@@ -15,8 +15,6 @@ tracker:
     - Done
 polling:
   interval_ms: 5000
-server:
-  port: 4114
 workspace:
   root: ~/code/symphony-workspaces
 hooks:

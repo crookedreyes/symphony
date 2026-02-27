@@ -66,9 +66,6 @@ workspace:
 hooks:
   after_create: |
     git clone git@github.com:your-org/your-repo.git .
-    if command -v mise >/dev/null 2>&1; then
-      cd elixir && mise trust && mise exec -- mix deps.get
-    fi
 agent:
   max_concurrent_agents: 10
 codex:
@@ -96,28 +93,25 @@ Notes:
 - For env-backed path values, use `$VAR`. `workspace.root` resolves `$VAR` before path handling,
   while `codex.command` stays a shell command string and any `$VAR` expansion there happens in the
   launched shell. Example:
- - If a hook needs `mise exec` inside a freshly cloned workspace, trust the repo config and fetch
-   the project deps in `hooks.after_create` before invoking `mise` later from other hooks.
- - `tracker.api_key` reads from `LINEAR_API_KEY` when unset or when value is `env:LINEAR_API_KEY`.
- - For env-backed values:
-   - For path values, `~` is expanded to the home directory and values prefixed with `env:VAR` are
-     replaced by `$VAR` before use.
-   - For shell commands, values like `$VAR` are expanded by the launching shell.
+- If a hook needs `mise exec` inside a freshly cloned workspace, trust the repo config and fetch
+  the project deps in `hooks.after_create` before invoking `mise` later from other hooks.
+- `tracker.api_key` reads from `LINEAR_API_KEY` when unset or when value is `env:LINEAR_API_KEY`.
+- For env-backed values:
+  - For path values, `~` is expanded to the home directory and values prefixed with `env:VAR` are
+    replaced by `$VAR` before use.
+  - For shell commands, values like `$VAR` are expanded by the launching shell.
 
-  ```yaml
-  workspace:
-    root: "$SYMPHONY_WORKSPACE_ROOT"
-  hooks:
-    after_create: |
-      git clone --depth 1 "$SOURCE_REPO_URL" .
-      if command -v mise >/dev/null 2>&1; then
-        cd elixir && mise trust && mise exec -- mix deps.get
-      fi
-  tracker:
-    api_key: "$LINEAR_API_KEY"
-  codex:
-    command: "$CODEX_BIN app-server --model gpt-5.3-codex"
-  ```
+```yaml
+tracker:
+  api_key: "$LINEAR_API_KEY"
+workspace:
+  root: "$SYMPHONY_WORKSPACE_ROOT"
+hooks:
+  after_create: |
+    git clone --depth 1 "$SOURCE_REPO_URL" .
+codex:
+  command: "$CODEX_BIN app-server --model gpt-5.3-codex"
+```
 
 - If `WORKFLOW.md` is missing or has invalid YAML, startup and scheduling are halted until fixed.
 - `server.port` or CLI `--port` enables the optional HTTP dashboard and JSON API at `/`,
@@ -169,3 +163,7 @@ actively running subagents, which is very useful during development.
 
 Launch `codex` in your repo, give it the URL to the Symphony repo, and ask it to set things up for
 you.
+
+## License
+
+This project is licensed under the [Apache License 2.0](../LICENSE).
