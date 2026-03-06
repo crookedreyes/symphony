@@ -1231,6 +1231,16 @@ defmodule SymphonyElixir.Orchestrator do
   end
 
   defp absolute_token_usage_from_payload(payload) when is_map(payload) do
+    if integer_token_map?(payload) do
+      payload
+    else
+      absolute_token_usage_from_nested_payload(payload)
+    end
+  end
+
+  defp absolute_token_usage_from_payload(_payload), do: nil
+
+  defp absolute_token_usage_from_nested_payload(payload) do
     absolute_paths = [
       ["params", "msg", "payload", "info", "total_token_usage"],
       [:params, :msg, :payload, :info, :total_token_usage],
@@ -1244,8 +1254,6 @@ defmodule SymphonyElixir.Orchestrator do
 
     explicit_map_at_paths(payload, absolute_paths)
   end
-
-  defp absolute_token_usage_from_payload(_payload), do: nil
 
   defp turn_completed_usage_from_payload(payload) when is_map(payload) do
     method = Map.get(payload, "method") || Map.get(payload, :method)

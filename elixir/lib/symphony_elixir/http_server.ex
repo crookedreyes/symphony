@@ -82,7 +82,29 @@ defmodule SymphonyElixir.HttpServer do
   defp normalize_host(host) when is_binary(host), do: host
   defp normalize_host(host), do: to_string(host)
 
-  defp secret_key_base do
-    Base.encode64(:crypto.strong_rand_bytes(@secret_key_bytes), padding: false)
+  defp request_error_response(:body_too_large),
+    do: error_response(413, "body_too_large", "Request body exceeds the maximum size")
+
+  defp request_error_response(_reason),
+    do: error_response(400, "bad_request", "Malformed HTTP request")
+
+  defp summarize_message(%{message: message}) when is_binary(message), do: message
+  defp summarize_message(%{message: message}) when is_map(message), do: Jason.encode!(message)
+  defp summarize_message(message) when is_binary(message), do: message
+  defp summarize_message(_message), do: nil
+
+  defp due_at_iso8601(due_in_ms) when is_integer(due_in_ms) do
+    DateTime.utc_now()
+    |> DateTime.add(div(due_in_ms, 1_000), :second)
+    |> DateTime.truncate(:second)
+    |> DateTime.to_iso8601()
+  end
+
+  defp due_at_iso8601(_due_in_ms), do: nil
+
+  defp iso8601(%DateTime{} = datetime) do
+    datetime
+    |> DateTime.truncate(:second)
+    |> DateTime.to_iso8601()
   end
 end

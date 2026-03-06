@@ -22,7 +22,15 @@ defmodule SymphonyElixir.MixProject do
           SymphonyElixir.CLI,
           SymphonyElixir.Codex.AppServer,
           SymphonyElixir.Codex.DynamicTool,
-          SymphonyElixir.HttpServer,
+          SymphonyElixir.ClaudeCode.Adapter,
+          SymphonyElixir.ClaudeCode.McpConfig,
+          SymphonyElixir.ClaudeCode.McpServer,
+          SymphonyElixir.ClaudeCode.Session,
+          SymphonyElixir.ClaudeCode.StreamParser,
+          SymphonyElixir.OpenCode.Adapter,
+          SymphonyElixir.OpenCode.Client,
+          SymphonyElixir.OpenCode.ConfigWriter,
+          SymphonyElixir.OpenCode.SseListener,
           SymphonyElixir.StatusDashboard,
           SymphonyElixir.LogFile,
           SymphonyElixir.Workspace,
@@ -56,7 +64,7 @@ defmodule SymphonyElixir.MixProject do
   def application do
     [
       mod: {SymphonyElixir.Application, []},
-      extra_applications: [:logger]
+      extra_applications: [:logger, :ssl, :crypto, :public_key]
     ]
   end
 

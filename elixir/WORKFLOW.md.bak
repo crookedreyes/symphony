@@ -22,12 +22,12 @@ hooks:
     gh repo clone crookedreyes/nalia . -- --depth 1
   before_remove: ""
 agent:
-  runtime: open_code
+  runtime: claude_code
   max_concurrent_agents: 10
   max_turns: 20
-open_code:
-  command: opencode
-  model: lmstudio/qwen3.5-9b
+claude_code:
+  command: claude
+  model: claude-sonnet-4-6
 ---
 
 You are working on a Linear ticket `{{ issue.identifier }}`
